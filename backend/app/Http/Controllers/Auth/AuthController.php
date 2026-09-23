@@ -51,6 +51,7 @@ class AuthController extends Controller
 
         [$user, $tenant] = $result;
 
+        $user->sendEmailVerificationNotification();
         event(new Registered($user));
 
         $this->audit->log('USER_REGISTERED', $tenant->id, $user->id, 'user', (string) $user->id);

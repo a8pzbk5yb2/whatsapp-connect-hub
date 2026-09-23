@@ -23,13 +23,27 @@ class EmailVerificationController extends Controller
         );
     }
 
+    public function verifyCurrent(Request $request): JsonResponse
+    {
+        $user = $request->user();
+
+        if ($user && ! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
+        return ApiResponse::success(
+            SessionResource::make($user, $user->currentTenant(), $request->bearerToken() ?? ''),
+            'Email confirmed.'
+        );
+    }
+
     public function resend(Request $request): JsonResponse
     {
-        if ($request->user()->hasVerifiedEmail()) {
+        if ($request->user()?->hasVerifiedEmail()) {
             return ApiResponse::success(null, 'Your email is already confirmed.');
         }
 
-        $request->user()->sendEmailVerificationNotification();
+        $request->user()?->sendEmailVerificationNotification();
 
         return ApiResponse::success(null, 'Confirmation email sent.');
     }

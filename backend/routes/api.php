@@ -14,14 +14,21 @@ $apiRoutes = function (): void {
     Route::post('auth/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
     Route::post('auth/login', [AuthController::class, 'login'])->middleware('throttle:20,1');
     Route::post('auth/forgot-password', [PasswordController::class, 'forgot'])->middleware('throttle:6,1');
+    Route::post('auth/password/forgot', [PasswordController::class, 'forgot'])->middleware('throttle:6,1');
     Route::post('auth/reset-password', [PasswordController::class, 'reset'])->middleware('throttle:6,1');
+    Route::post('auth/password/reset', [PasswordController::class, 'reset'])->middleware('throttle:6,1');
 
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::post('auth/logout', [AuthController::class, 'logout']);
         Route::get('auth/me', [AuthController::class, 'me']);
+
+        // Email verification endpoints & aliases
         Route::get('auth/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
             ->middleware('signed')
             ->name('verification.verify');
+        Route::post('auth/email/verify', [EmailVerificationController::class, 'verifyCurrent']);
+        Route::post('auth/email/resend', [EmailVerificationController::class, 'resend'])
+            ->middleware('throttle:6,1');
         Route::post('auth/verify-email/resend', [EmailVerificationController::class, 'resend'])
             ->middleware('throttle:6,1');
 
@@ -48,6 +55,6 @@ $apiRoutes = function (): void {
     });
 };
 
-// Register routes for both /auth/login and /v1/auth/login
+// Register routes for both /auth/* and /v1/auth/*
 $apiRoutes();
 Route::prefix('v1')->group($apiRoutes);
