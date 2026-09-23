@@ -1,0 +1,16 @@
+# Use this file only when the hosting account points the domain at the project
+# root instead of the public/ folder (common on cPanel when you upload the whole
+# project inside public_html). It forwards every request into public/ while
+# keeping .env, vendor and storage unreachable from the web.
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteRule ^(\.env|\.env\..*|composer\.(json|lock)|artisan)$ - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|routes|storage|tests|vendor|docker)/ - [F,L]
+
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+Options -Indexes
