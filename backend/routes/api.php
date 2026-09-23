@@ -9,7 +9,7 @@ use App\Http\Controllers\Tenant\TeamController;
 use App\Http\Controllers\Tenant\TenantController;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('v1')->group(function (): void {
+$apiRoutes = function (): void {
     // Public auth endpoints.
     Route::post('auth/register', [AuthController::class, 'register'])->middleware('throttle:10,1');
     Route::post('auth/login', [AuthController::class, 'login'])->middleware('throttle:20,1');
@@ -46,4 +46,8 @@ Route::prefix('v1')->group(function (): void {
             Route::get('audit-logs', [AdminController::class, 'auditLogs']);
         });
     });
-});
+};
+
+// Register routes for both /auth/login and /v1/auth/login
+$apiRoutes();
+Route::prefix('v1')->group($apiRoutes);
