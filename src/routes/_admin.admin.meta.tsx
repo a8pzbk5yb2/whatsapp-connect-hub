@@ -18,7 +18,7 @@ export const Route = createFileRoute("/_admin/admin/meta")({
   component: AdminMeta,
 });
 
-function Row({ label, value, loading }: { label: string; value?: string; loading: boolean }) {
+function Row({ label, value, loading }: { label: string; value?: string | undefined; loading: boolean }) {
   return (
     <div className="flex items-center justify-between border-b border-border py-3 last:border-0">
       <span className="text-sm text-muted-foreground">{label}</span>

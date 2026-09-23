@@ -55,7 +55,7 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
         "Content-Type": "application/json",
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: options.body ? JSON.stringify(options.body) : undefined,
+      ...(options.body ? { body: JSON.stringify(options.body) } : {}),
     });
   } catch {
     throw new ApiError("NETWORK_ERROR", "We could not reach the server. Check your connection and try again.", 0);
