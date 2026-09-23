@@ -11,6 +11,7 @@ export class ApiError extends Error {
     public code: string,
     message: string,
     public status = 400,
+    public details?: unknown,
   ) {
     super(message);
   }
