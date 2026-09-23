@@ -1,0 +1,30 @@
+{
+  "name": "platform/whatsapp-saas-api",
+  "type": "project",
+  "description": "Multi-tenant WhatsApp Business Platform SaaS API (Phase 1 foundation).",
+  "require": {
+    "php": "^8.3",
+    "laravel/framework": "^11.0",
+    "laravel/sanctum": "^4.0",
+    "predis/predis": "^2.2"
+  },
+  "require-dev": {
+    "fakerphp/faker": "^1.23",
+    "phpunit/phpunit": "^11.0",
+    "mockery/mockery": "^1.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Database\\Factories\\": "database/factories/",
+      "Database\\Seeders\\": "database/seeders/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
