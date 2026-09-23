@@ -55,14 +55,28 @@ Configure in the Meta App dashboard:
 GET answers the challenge; POST verifies `X-Hub-Signature-256` and returns 200
 immediately — processing is queued, never inline.
 
-## Production
+## Shared hosting (cPanel / Plesk / LiteSpeed)
+
+No Docker, Node.js or Redis needed. Point the domain at `public/` (or upload the
+project into the served folder and let the bundled root `.htaccess` forward into
+`public/`), copy `.env.example` to `.env`, then run `migrate --force` and the
+role seeder. Queue and scheduler run from two one-minute cron jobs.
+
+Full step-by-step guide: `../DEPLOY-SHARED-HOSTING.md`.
+
+Cache, sessions and the queue default to MySQL/files so a host without Redis
+works out of the box.
+
+## Production (VPS / Docker)
 
 Cloudflare → Nginx → PHP-FPM, with Redis, queue workers and the scheduler under
-Supervisor (`docker/supervisord.conf`). Start with:
+Supervisor (`docker/supervisord.conf`). Set `CACHE_STORE`, `QUEUE_CONNECTION`
+and `SESSION_DRIVER` to `redis`, then start with:
 
 ```bash
 docker compose up -d --build
 ```
+
 
 ## Tests
 
