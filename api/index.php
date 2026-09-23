@@ -1,9 +1,14 @@
 <?php
 // Bridge between single domain root and backend public entrypoint
-$backendPublic = __DIR__ . '/../backend/public/index.php';
-if (file_exists($backendPublic)) {
-    chdir(__DIR__ . '/../backend/public');
-    require $backendPublic;
+$pathOutside = __DIR__ . '/../../backend/public/index.php';
+$pathInside = __DIR__ . '/../backend/public/index.php';
+
+if (file_exists($pathOutside)) {
+    chdir(dirname($pathOutside));
+    require $pathOutside;
+} elseif (file_exists($pathInside)) {
+    chdir(dirname($pathInside));
+    require $pathInside;
 } else {
     header('HTTP/1.1 500 Internal Server Error');
     header('Content-Type: application/json');
