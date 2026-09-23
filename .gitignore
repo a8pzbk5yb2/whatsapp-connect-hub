@@ -39,3 +39,4 @@ dist-ssr
 zip_*.php
 unzip_backend.php
 check_laravel.php
+read_log.php

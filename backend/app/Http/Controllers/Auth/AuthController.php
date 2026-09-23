@@ -52,16 +52,13 @@ class AuthController extends Controller
         [$user, $tenant] = $result;
 
         try {
-            $user->sendEmailVerificationNotification();
+            event(new Registered($user));
         } catch (\Throwable $e) {
-            // Sign-up must succeed even when the mail transport is unavailable.
             \Illuminate\Support\Facades\Log::error('Verification email failed to send', [
                 'user_id' => $user->id,
                 'reason' => $e->getMessage(),
             ]);
         }
-
-        event(new Registered($user));
 
         $this->audit->log('USER_REGISTERED', $tenant->id, $user->id, 'user', (string) $user->id);
 
