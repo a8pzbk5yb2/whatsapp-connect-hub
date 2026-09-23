@@ -33,3 +33,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Build & Deploy Archives
+*.zip
+zip_*.php
+unzip_backend.php
+check_laravel.php

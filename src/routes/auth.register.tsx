@@ -63,6 +63,13 @@ function RegisterPage() {
       toast.success("Account created. Please confirm your email address.");
       navigate({ to: "/auth/verify-email", replace: true });
     } catch (error) {
+      if (error instanceof ApiError && error.details && typeof error.details === "object") {
+        Object.entries(error.details as Record<string, string[]>).forEach(([field, msgs]) => {
+          if (msgs?.[0] && field in form.getValues()) {
+            form.setError(field as keyof FormValues, { message: msgs[0] });
+          }
+        });
+      }
       toast.error(error instanceof ApiError ? error.message : "We could not create your account. Please try again.");
     }
   }

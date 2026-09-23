@@ -71,10 +71,21 @@ export async function apiRequest<T>(path: string, options: RequestOptions = {}):
   }
 
   if (!response.ok || !envelope.success) {
+    const details = envelope.error?.details;
+    let message = envelope.message || "Something went wrong. Please try again.";
+
+    if (details && typeof details === "object") {
+      const firstErrorArr = Object.values(details)[0];
+      if (Array.isArray(firstErrorArr) && firstErrorArr[0]) {
+        message = String(firstErrorArr[0]);
+      }
+    }
+
     throw new ApiError(
       envelope.error?.code ?? "REQUEST_FAILED",
-      envelope.message || "Something went wrong. Please try again.",
+      message,
       response.status,
+      details,
     );
   }
 

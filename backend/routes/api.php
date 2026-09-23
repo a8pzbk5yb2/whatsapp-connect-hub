@@ -55,6 +55,10 @@ $apiRoutes = function (): void {
     });
 };
 
-// Register routes for both /auth/* and /v1/auth/*
+// Register routes for all prefix variations (/api/auth/*, /api/v1/auth/*, /auth/*)
+Route::prefix('api')->group(function () use ($apiRoutes) {
+    $apiRoutes();
+    Route::prefix('v1')->group($apiRoutes);
+});
 $apiRoutes();
 Route::prefix('v1')->group($apiRoutes);
