@@ -6,10 +6,17 @@
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
+// `bun run build:static` sets SHARED_HOSTING=1. That build emits a plain static
+// site (HTML + JS + CSS) that any Apache/LiteSpeed shared host can serve, with
+// no Node.js process required. The default build is unchanged.
+const sharedHosting = process.env["SHARED_HOSTING"] === "1";
+
 export default defineConfig({
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    ...(sharedHosting ? { spa: { enabled: true, prerender: { outputPath: "/index.html" } } } : {}),
   },
+  ...(sharedHosting ? { nitro: { preset: "static" as const } } : {}),
 });
